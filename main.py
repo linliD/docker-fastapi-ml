@@ -24,6 +24,22 @@ def ask(text: str, image: UploadFile):
     result = model_pipeline(text, image)
     return {"answer": result}
     
-    
+
+@app.post("/askwithurl")
+def ask(question: str, url: str):
+    image = Image.open(requests.get(url, stream=True).raw)
+
+    result = model_pipeline(question, image)
+    return {"answer": result}
+
+
+@app.post("/askbyupload")
+def ask(question: str, image: UploadFile):
+    content = image.file.read()
+    image = Image.open(io.BytesIO(content))
+    # image = Image(image.file.read())
+
+    result = model_pipeline(question, image)
+    return {"answer": result}
     
     
